@@ -1,58 +1,63 @@
 'use strict';
 
 var SummaryComponent = React.createClass({
-    displayName: 'SummaryComponent',
+    displayName: "SummaryComponent",
 
     mixins: [Backbone.React.Component.mixin],
     render: function () {
         return React.createElement(
-            'div',
+            "div",
             null,
             React.createElement(
-                'h2',
+                "h2",
                 null,
-                'Összegzés'
+                "Összegzés"
             ),
             React.createElement(
-                'dl',
+                "dl",
                 null,
                 React.createElement(
-                    'dt',
+                    "dt",
                     null,
-                    'Eltöltött idő'
+                    "Eltöltött idő"
                 ),
                 React.createElement(
-                    'dd',
+                    "dd",
                     null,
                     this.props.time_spent
                 ),
                 React.createElement(
-                    'dt',
+                    "dt",
                     null,
-                    'Kérdések száma'
+                    "Kérdések száma"
                 ),
                 React.createElement(
-                    'dd',
+                    "dd",
                     null,
                     this.state.model.questions.length
                 ),
                 React.createElement(
-                    'dt',
+                    "dt",
                     null,
-                    'Válaszok száma'
+                    "Válaszok száma"
                 ),
                 React.createElement(
-                    'dd',
+                    "dd",
                     null,
                     this.props.num_answers
                 )
+            ),
+            React.createElement(
+                "a",
+                { className: "btn btn-success", href: "index.html" },
+                "Kvíz lista"
             )
         );
     }
 });
 
 var QuizComponent = React.createClass({
-    displayName: 'QuizComponent',
+    displayName: "QuizComponent",
 
     mixins: [Backbone.React.Component.mixin],
     getInitialState: function () {
@@ -83,8 +88,8 @@ var QuizComponent = React.createClass({
     },
     createAnswer: function (answer) {
         return React.createElement(
-            'a',
-            { className: 'col-xs-6 btn btn-default', 'data-goto': answer.goto, onClick: this.handleClick },
+            "a",
+            { className: "col-xs-6 btn btn-default", "data-goto": answer.goto, onClick: this.handleClick },
             answer.text
         );
     },
@@ -93,27 +98,27 @@ var QuizComponent = React.createClass({
         let image;
         if (this.props.model.getImagePath(this.state.current)) {
             let imagePath = this.props.model.getImagePath(this.state.current);
-            image = React.createElement('img', { className: 'img-responsive center-block', src: imagePath });
+            image = React.createElement("img", { className: "img-responsive center-block", src: imagePath });
         } else {
             image = '';
         }
 
         return React.createElement(
-            'div',
+            "div",
             null,
             React.createElement(
-                'div',
-                { id: 'question' },
+                "div",
+                { id: "question" },
                 React.createElement(
-                    'h2',
-                    { className: 'qtext' },
+                    "h2",
+                    { className: "qtext" },
                     currentQuestion.question
                 ),
                 image
             ),
             React.createElement(
-                'div',
-                { className: 'row' },
+                "div",
+                { className: "row" },
                 currentQuestion.answers.map(this.createAnswer)
             )
         );
@@ -130,10 +135,10 @@ var QuizComponent = React.createClass({
         }
 
         return React.createElement(
-            'div',
-            { className: 'container' },
+            "div",
+            { className: "container" },
             React.createElement(
-                'h1',
+                "h1",
                 null,
                 this.state.model.name
             ),

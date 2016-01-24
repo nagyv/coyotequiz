@@ -11,7 +11,9 @@ var SummaryComponent = React.createClass({
             <dd>{this.state.model.questions.length}</dd>
             <dt>Válaszok száma</dt>
             <dd>{this.props.num_answers}</dd>
-            </dl></div>;
+            </dl>
+            <a className="btn btn-success" href="index.html">Kvíz lista</a>
+            </div>;
     }
 });
 
