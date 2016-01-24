@@ -1,15 +1,18 @@
+'use strict';
+
 var HomeComponent = React.createClass({
   mixins: [Backbone.React.Component.mixin],
   createEntry: function (entry) {
-    return <li key={entry.id}>{entry.name}</li>;
+    let href = "quiz.html?id=" + entry.id;
+    return <li key={entry.id}><a href={href}>{entry.name}</a></li>;
   },
   render: function () {
-    return <div>
-        <h1>Sakál kvíz</h1>
+    return <div className="container">
+        <h1 >Sakál kvíz</h1>
         <h2>Korábbi kvízek</h2>
         <ul>{this.state.collection.map(this.createEntry)}</ul>
-        <a class="btn btn-default" href="new.html">
-            <span class="glyphicon glyphicon-plus"></span> Új kvíz</a>
+        <a className="btn btn-default" href="new.html">
+            <span className="glyphicon glyphicon-plus"></span> Új kvíz</a>
         </div>;
   }
 });

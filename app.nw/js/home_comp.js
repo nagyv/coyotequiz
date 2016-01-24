@@ -1,18 +1,25 @@
+'use strict';
+
 var HomeComponent = React.createClass({
   displayName: "HomeComponent",
 
   mixins: [Backbone.React.Component.mixin],
   createEntry: function (entry) {
+    let href = "quiz.html?id=" + entry.id;
     return React.createElement(
       "li",
       { key: entry.id },
-      entry.name
+      React.createElement(
+        "a",
+        { href: href },
+        entry.name
+      )
     );
   },
   render: function () {
     return React.createElement(
       "div",
-      null,
+      { className: "container" },
       React.createElement(
         "h1",
         null,
@@ -30,8 +37,8 @@ var HomeComponent = React.createClass({
       ),
       React.createElement(
         "a",
-        { "class": "btn btn-default", href: "new.html" },
-        React.createElement("span", { "class": "glyphicon glyphicon-plus" }),
+        { className: "btn btn-default", href: "new.html" },
+        React.createElement("span", { className: "glyphicon glyphicon-plus" }),
         " Új kvíz"
       )
     );
