@@ -257,6 +257,12 @@ var NewQuizComponent = React.createClass({
                     { className: 'btn btn-success', onClick: this.save },
                     React.createElement('span', { className: 'glyphicon glyphicon-floppy-save' }),
                     ' Mentés'
+                ),
+                React.createElement(
+                    'a',
+                    { className: 'btn btn-warning', href: 'index.html' },
+                    React.createElement('span', { className: 'glyphicon glyphicon-home' }),
+                    ' Kvízlista'
                 )
             )
         );

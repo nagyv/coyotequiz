@@ -189,6 +189,7 @@ var NewQuizComponent = React.createClass({
             </div>
             <button className="btn btn-default" onClick={this.addQuestion}><span className="glyphicon glyphicon-plus"></span> Új kérdés</button>
             <button className="btn btn-success" onClick={this.save}><span className="glyphicon glyphicon-floppy-save"></span> Mentés</button>
+            <a className="btn btn-warning" href="index.html"><span className="glyphicon glyphicon-home"></span> Kvízlista</a>
         </form>
     </div>;
   }
