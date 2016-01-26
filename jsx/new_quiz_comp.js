@@ -83,13 +83,11 @@ var QuestionComponent = React.createClass({
             id: '-1',
             text: 'Vége'
         }))
-        if (options.length > 0) {
-            options = options.map(function(question){
-                let text = question.get('text');
-                let cid = question.cid;
-                return <option value={cid}>{text}</option>;
-            });
-        }
+        options = options.map(function(question){
+            let text = question.get('text');
+            let cid = question.id || question.cid;
+            return <option value={cid}>{text}</option>;
+        });
 
         return <select data-field={"goto" + idx} defaultValue={defaultValue}
             onChange={this.updateQuestion}>{options}</select>
@@ -170,13 +168,13 @@ var NewQuizComponent = React.createClass({
   },
   save: function(event) {
     event.preventDefault();
-//    writeQuiz({
-//        name: this.state.name,
-//        start: 0,
-//        questions: this.state.questions.asQuizJSON(),
-//    }, function(err) {
-//        window.location = 'home.html';
-//    });
+    writeQuiz(this.props.quiz ? this.props.quiz.id : null, {
+        name: this.state.name,
+        start: 0,
+        questions: this.state.questions.asQuizJSON(),
+    }, function(err) {
+        window.location = 'index.html';
+    });
   },
   render: function () {
     return <div className="container">

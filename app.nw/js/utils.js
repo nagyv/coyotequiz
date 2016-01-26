@@ -1,5 +1,6 @@
 'use strict';
 var fs = require('fs');
+var uuid = require('uuid');
 const quiz_repo = '../quizzes';
 
 function ready(fn) {
@@ -37,6 +38,25 @@ function setup(callback) {
         } else {
             ready(callback());
         }
+    });
+}
+
+function writeQuiz(uid, data, cb) {
+    if(!uid) {
+        uid = uuid.v1();
+        let err = fs.mkdirSync(quiz_repo + '/' + uid);
+        if(err) {
+            alert("Could not save quiz. Please report this!");
+            cb(err);
+            return;
+        }
+    }
+
+    let base_dir = quiz_repo + '/' +  uid;
+    fs.writeFile(base_dir + '/quiz.json', JSON.stringify(data), function(err) {
+        if (err) throw err;
+        // TODO: move the images
+        cb(err);
     });
 }
 
