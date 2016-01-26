@@ -1,7 +1,8 @@
 'use strict';
 var fs = require('fs');
+var path = require('path');
 var uuid = require('uuid');
-const quiz_repo = '../quizzes';
+const quiz_repo = path.join('..', 'quizzes');
 
 function ready(fn) {
     if (document.readyState != 'loading'){
@@ -42,7 +43,7 @@ function setup(callback) {
 }
 
 function loadQuiz(id, cb) {
-    let quiz_json = quiz_repo + '/' +  id + '/quiz.json';
+    let quiz_json = path.join(quiz_repo, id, 'quiz.json');
     fs.access(quiz_json, fs.R_OK, function(err) {
         if(err) {
             console.log('No quiz.json exists', quiz_json);
@@ -61,7 +62,7 @@ function loadQuiz(id, cb) {
 function writeQuiz(uid, data, cb) {
     if(!uid) {
         uid = uuid.v1();
-        let err = fs.mkdirSync(quiz_repo + '/' + uid);
+        let err = fs.mkdirSync(path.join(quiz_repo, uid));
         if(err) {
             alert("Could not save quiz. Please report this!");
             cb(err);
@@ -69,20 +70,24 @@ function writeQuiz(uid, data, cb) {
         }
     }
 
-    let base_dir = quiz_repo + '/' +  uid;
+    let base_dir = path.join(quiz_repo, uid);
 
     // collect and move images
     // TODO: this should be done in sync
     data.questions = _.map(data.questions, function(question){
         if(question.image) {
-            let filename = uuid.v1() + '.' + question.image.split('.')[1];
-            fs.createReadStream(question.image).pipe(fs.createWriteStream(base_dir + '/' + filename));
-            question.image = filename;
+            fs.access(path.join(base_dir, path.basename(question.image)), fs.R_OK, function(err){
+                if(err) {
+                    let filename = uuid.v1() + '.' + question.image.split('.')[1];
+                    fs.createReadStream(question.image).pipe(fs.createWriteStream(path.join(base_dir, filename)));
+                    question.image = filename;
+                }
+            });
         }
         return question;
     });
 
-    fs.writeFile(base_dir + '/quiz.json', JSON.stringify(data), function(err) {
+    fs.writeFile(path.join(base_dir, 'quiz.json'), JSON.stringify(data), function(err) {
         if (err) throw err;
         cb(err);
     });
@@ -91,7 +96,7 @@ function writeQuiz(uid, data, cb) {
 var Quiz = Backbone.Model.extend({
     getImagePath: function(question) {
         if(!this.get('questions')[question].image) return false;
-        return fs.realpathSync(quiz_repo + '/' + this.id + '/' + this.get('questions')[question].image);
+        return fs.realpathSync(path.join(quiz_repo, this.id, this.get('questions')[question].image));
     }
 });
 var Quizzes = new (Backbone.Collection.extend({
