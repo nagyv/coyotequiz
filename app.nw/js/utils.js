@@ -70,9 +70,20 @@ function writeQuiz(uid, data, cb) {
     }
 
     let base_dir = quiz_repo + '/' +  uid;
+
+    // collect and move images
+    // TODO: this should be done in sync
+    data.questions = _.map(data.questions, function(question){
+        if(question.image) {
+            let filename = uuid.v1() + '.' + question.image.split('.')[1];
+            fs.createReadStream(question.image).pipe(fs.createWriteStream(base_dir + '/' + filename));
+            question.image = filename;
+        }
+        return question;
+    });
+
     fs.writeFile(base_dir + '/quiz.json', JSON.stringify(data), function(err) {
         if (err) throw err;
-        // TODO: move the images
         cb(err);
     });
 }
@@ -80,7 +91,7 @@ function writeQuiz(uid, data, cb) {
 var Quiz = Backbone.Model.extend({
     getImagePath: function(question) {
         if(!this.get('questions')[question].image) return false;
-        return quiz_repo + '/' + this.id + '/' + this.get('questions')[question].image;
+        return fs.realpathSync(quiz_repo + '/' + this.id + '/' + this.get('questions')[question].image);
     }
 });
 var Quizzes = new (Backbone.Collection.extend({

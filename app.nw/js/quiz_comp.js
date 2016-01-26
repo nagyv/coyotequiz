@@ -93,12 +93,12 @@ var QuizComponent = React.createClass({
             answer.text
         );
     },
-    createQuestion: function (question) {
+    createQuestion: function () {
         let currentQuestion = this.getQuestion();
         let image;
         if (this.props.model.getImagePath(this.state.current)) {
             let imagePath = this.props.model.getImagePath(this.state.current);
-            image = React.createElement("img", { className: "img-responsive center-block", src: imagePath });
+            image = React.createElement("img", { className: "img-responsive center-block", src: "file://" + imagePath });
         } else {
             image = '';
         }

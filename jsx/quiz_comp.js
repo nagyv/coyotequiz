@@ -48,12 +48,12 @@ var QuizComponent = React.createClass({
   createAnswer: function(answer) {
     return <a className="col-xs-6 btn btn-default" data-goto={answer.goto} onClick={this.handleClick}>{answer.text}</a>;
   },
-  createQuestion: function(question) {
+  createQuestion: function() {
     let currentQuestion = this.getQuestion();
     let image;
     if(this.props.model.getImagePath(this.state.current)) {
         let imagePath = this.props.model.getImagePath(this.state.current);
-        image = <img className="img-responsive center-block" src={imagePath} />;
+        image = <img className="img-responsive center-block" src={"file://" + imagePath} />;
     } else {
         image = '';
     }

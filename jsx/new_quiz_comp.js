@@ -27,10 +27,10 @@ var Questions = Backbone.Collection.extend({
         });
     },
     fromQuiz: function(quiz) {
-        let questions = quiz.get('questions').map(function(question){
+        let questions = quiz.get('questions').map(function(question, idx){
             return new Question({
                 'text': question.question,
-                'image': question.image,
+                'image': quiz.getImagePath(idx),
                 'answer1': question.answers[0] ? question.answers[0].text : '',
                 'goto1': question.answers[0] ? question.answers[0].goto : -1,
                 'answer2': question.answers[1] ? question.answers[1].text : '',
@@ -62,7 +62,8 @@ var QuestionComponent = React.createClass({
     mixins: [Backbone.React.Component.mixin],
     getInitialState: function() {
         return {
-            is_open: this.props.is_open
+            is_open: this.props.is_open,
+            imageData: "file://" + this.props.model.get('image')
         };
     },
 //    remove: function() {
@@ -70,6 +71,21 @@ var QuestionComponent = React.createClass({
 //    },
     updateQuestion: function(event){
         this.props.model.set(event.target.dataset.field, event.target.value);
+    },
+    previewImage: function(event) {
+        if(event) this.updateQuestion(event);
+      var reader  = new FileReader();
+
+      var comp = this;
+      reader.addEventListener("load", function () {
+        comp.setState({
+            imageData: reader.result
+        })
+      }, false);
+
+      if (this.props.model.get('image')) {
+        reader.readAsDataURL(new File(this.props.model.get('image'), 'image'));
+      }
     },
     toggle: function() {
         this.setState({ is_open: !this.state.is_open })
@@ -117,6 +133,14 @@ var QuestionComponent = React.createClass({
                     <label>Question</label>
                     <input type="text" className="form-control" data-field="text" defaultValue={this.state.model.text}
                      onChange={this.updateQuestion} />
+                </div>
+                <div className="form-group row">
+                    <div className="col-xs-6">
+                    <label>Image</label>
+                    <input type="file" className="form-control" data-field="image" defaultValue={this.state.model.image}
+                     onChange={this.previewImage} />
+                     </div>
+                    <img className="col-xs-6 center-block" src={this.state.imageData} />
                 </div>
                 {[1,2,3,4].map(this.renderAnswerForm)}
               </div>
