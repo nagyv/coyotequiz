@@ -4,7 +4,7 @@ var HomeComponent = React.createClass({
   mixins: [Backbone.React.Component.mixin],
   createEntry: function (entry) {
     let href = "quiz.html?id=" + entry.id;
-    return <li key={entry.id}><a href={href}>{entry.name}</a></li>;
+    return <li key={entry.id}><a href={href}>{entry.name}</a> <a href={"new.html?id=" + entry.id}><span className="glyphicon glyphicon-pencil"></span></a></li>;
   },
   render: function () {
     return <div className="container">

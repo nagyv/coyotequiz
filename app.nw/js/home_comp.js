@@ -13,6 +13,12 @@ var HomeComponent = React.createClass({
         "a",
         { href: href },
         entry.name
+      ),
+      " ",
+      React.createElement(
+        "a",
+        { href: "new.html?id=" + entry.id },
+        React.createElement("span", { className: "glyphicon glyphicon-pencil" })
       )
     );
   },
