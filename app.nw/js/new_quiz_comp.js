@@ -130,7 +130,7 @@ var QuestionComponent = React.createClass({
                 React.createElement(
                     'label',
                     null,
-                    'Answer ',
+                    'Válasz ',
                     idx
                 ),
                 React.createElement('input', { type: 'text', className: 'form-control', 'data-field': "answer" + idx, defaultValue: answer,
@@ -142,7 +142,7 @@ var QuestionComponent = React.createClass({
                 React.createElement(
                     'label',
                     null,
-                    'Goto'
+                    'Következő'
                 ),
                 gotoOptions
             )
@@ -156,7 +156,7 @@ var QuestionComponent = React.createClass({
             React.createElement(
                 'h3',
                 { onClick: this.toggle },
-                this.state.model.text ? this.state.model.text : 'New question'
+                this.state.model.text ? this.state.model.text : 'Új kérdés'
             ),
             React.createElement(
                 Collapse,
@@ -170,7 +170,7 @@ var QuestionComponent = React.createClass({
                         React.createElement(
                             'label',
                             null,
-                            'Question'
+                            'Kérdés'
                         ),
                         React.createElement('input', { type: 'text', className: 'form-control', 'data-field': 'text', defaultValue: this.state.model.text,
                             onChange: this.updateQuestion })
@@ -184,7 +184,7 @@ var QuestionComponent = React.createClass({
                             React.createElement(
                                 'label',
                                 null,
-                                'Image'
+                                'Kép'
                             ),
                             React.createElement('input', { type: 'file', className: 'form-control', 'data-field': 'image', defaultValue: this.state.model.image,
                                 onChange: this.previewImage })
