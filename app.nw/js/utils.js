@@ -2,7 +2,7 @@
 var fs = require('fs');
 var path = require('path');
 var uuid = require('uuid');
-const quiz_repo = path.join('..', 'quizzes');
+const quiz_repo = 'quizzes';
 
 function ready(fn) {
     if (document.readyState != 'loading'){
@@ -25,19 +25,18 @@ function getQueryVariable(variable) {
 }
 
 function setup(callback) {
-    fs.access(quiz_repo, fs.R_OK | fs.W_OK, function(err) {
-        console.log(err ? 'quizzes dir does not exist' : 'quizzes dir exists');
-        if(err) {
+    fs.exists(quiz_repo, function(exists) {
+        console.log(exists ? 'quizzes dir exists' : 'quizzes dir does not exist');
+        if(!exists) {
             fs.mkdir(quiz_repo, function(err) {
                 if(err) {
-                    alert('Could not create quiz repository. Quitting.');
-                    nw.App.quit();
+					alert("Nem tudtam létrehozni a kvíz könyvtárat");
                 } else {
-                    ready(callback());
-                }
+					ready(callback);
+				}
             })
         } else {
-            ready(callback());
+            ready(callback);
         }
     });
 }
@@ -76,13 +75,15 @@ function writeQuiz(uid, data, cb) {
     // TODO: this should be done in sync
     data.questions = _.map(data.questions, function(question){
         if(question.image) {
-            fs.access(path.join(base_dir, path.basename(question.image)), fs.R_OK, function(err){
-                if(err) {
-                    let filename = uuid.v1() + '.' + question.image.split('.')[1];
-                    fs.createReadStream(question.image).pipe(fs.createWriteStream(path.join(base_dir, filename)));
-                    question.image = filename;
-                }
-            });
+			let exists = fs.existsSync(path.join(base_dir, path.basename(question.image)))
+			if(!exists) {
+				let filename = uuid.v1() + '.' + question.image.split('.')[1];
+				fs.createReadStream(question.image).pipe(fs.createWriteStream(path.join(base_dir, filename)));
+				question.image = filename;
+			} else {
+				let filename = question.image.split(path.sep).splice(-1)[0];
+				question.image = filename;
+			}
         }
         return question;
     });

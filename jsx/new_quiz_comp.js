@@ -113,12 +113,12 @@ var QuestionComponent = React.createClass({
         let answer = this.state.model["answer" + idx];
         return <div className="form-inline">
                 <div className="form-group">
-                    <label>Answer {idx}</label>
+                    <label>Válasz {idx}</label>
                     <input type="text" className="form-control" data-field={"answer" + idx} defaultValue={answer}
                      onChange={this.updateQuestion} />
                 </div>
                 <div className="form-group">
-                    <label>Goto</label>
+                    <label>Következő</label>
                     {gotoOptions}
                 </div>
             </div>
@@ -126,17 +126,17 @@ var QuestionComponent = React.createClass({
     render: function() {
         let Collapse = ReactBootstrap.Collapse;
         return <div>
-            <h3 onClick={this.toggle}>{this.state.model.text ? this.state.model.text : 'New question'}</h3>
+            <h3 onClick={this.toggle}>{this.state.model.text ? this.state.model.text : 'Új kérdés'}</h3>
             <Collapse in={this.state.is_open}>
               <div>
                 <div className="form-group">
-                    <label>Question</label>
+                    <label>Kérdés</label>
                     <input type="text" className="form-control" data-field="text" defaultValue={this.state.model.text}
                      onChange={this.updateQuestion} />
                 </div>
                 <div className="form-group row">
                     <div className="col-xs-6">
-                    <label>Image</label>
+                    <label>Kép</label>
                     <input type="file" className="form-control" data-field="image" defaultValue={this.state.model.image}
                      onChange={this.previewImage} />
                      </div>
