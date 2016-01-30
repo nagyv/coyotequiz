@@ -60,6 +60,7 @@ var QuizComponent = React.createClass({
     displayName: "QuizComponent",
 
     mixins: [Backbone.React.Component.mixin],
+    availableBtnClasses: ['hvr-grow', 'hvr-shrink', 'hvr-pulse', 'hvr-pulse-grow', 'hvr-pulse-shrink', 'hvr-push', 'hvr-pop', 'hvr-bounce-in', 'hvr-bounce-out', 'hvr-rotate', 'hvr-sink', 'hvr-bob'],
     getInitialState: function () {
         return {
             current: 0,
@@ -87,9 +88,10 @@ var QuizComponent = React.createClass({
         }
     },
     createAnswer: function (answer) {
+        let hoverClass = _.sample(this.availableBtnClasses);
         return React.createElement(
             "a",
-            { className: "col-xs-6 btn btn-default", "data-goto": answer.goto, onClick: this.handleClick },
+            { className: "col-xs-6 btn btn-primary " + hoverClass, "data-goto": answer.goto, onClick: this.handleClick },
             answer.text
         );
     },
