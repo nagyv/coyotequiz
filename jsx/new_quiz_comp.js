@@ -105,7 +105,7 @@ var QuestionComponent = React.createClass({
             return <option value={cid}>{text}</option>;
         });
 
-        return <select data-field={"goto" + idx} defaultValue={defaultValue}
+        return <select data-field={"goto" + idx} value={defaultValue}
             onChange={this.updateQuestion}>{options}</select>
     },
     renderAnswerForm: function(idx) {

@@ -113,7 +113,7 @@ var QuestionComponent = React.createClass({
 
         return React.createElement(
             'select',
-            { 'data-field': "goto" + idx, defaultValue: defaultValue,
+            { 'data-field': "goto" + idx, value: defaultValue,
                 onChange: this.updateQuestion },
             options
         );
