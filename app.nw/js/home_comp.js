@@ -32,11 +32,6 @@ var HomeComponent = React.createClass({
         "Sakál kvíz"
       ),
       React.createElement(
-        "h2",
-        null,
-        "Korábbi kvízek"
-      ),
-      React.createElement(
         "ul",
         null,
         this.state.collection.map(this.createEntry)

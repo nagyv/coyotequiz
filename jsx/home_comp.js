@@ -9,7 +9,6 @@ var HomeComponent = React.createClass({
   render: function () {
     return <div className="container">
         <h1 >Sakál kvíz</h1>
-        <h2>Korábbi kvízek</h2>
         <ul>{this.state.collection.map(this.createEntry)}</ul>
         <a className="btn btn-default" href="new.html">
             <span className="glyphicon glyphicon-plus"></span> Új kvíz</a>
