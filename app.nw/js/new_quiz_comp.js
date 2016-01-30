@@ -94,9 +94,7 @@ var QuestionComponent = React.createClass({
     },
     renderGotos: function (idx, defaultValue) {
         var cid = this.props.model.cid;
-        let options = this.props.collection.reject(function (question) {
-            return question.cid === cid;
-        });
+        let options = _.clone(this.props.collection.models);
         options.push(new Question({
             id: '-1',
             text: 'Vége'
