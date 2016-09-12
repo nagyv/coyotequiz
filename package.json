@@ -1,0 +1,31 @@
+{
+  "name": "coyotequiz",
+  "version": "1.0.0",
+  "description": "A quiz app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nagyv/coyotequiz.git"
+  },
+  "keywords": [
+    "quiz",
+    "node-webkit"
+  ],
+  "author": "Viktor Nagy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nagyv/coyotequiz/issues"
+  },
+  "homepage": "https://github.com/nagyv/coyotequiz#readme",
+  "devDependencies": {
+    "babel-cli": "^6.14.0",
+    "babel-preset-react": "^6.11.1",
+    "nw-builder": "^3.0.0"
+  },
+  "dependencies": {
+    "uuid": "^2.0.2"
+  }
+}

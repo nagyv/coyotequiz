@@ -1,4 +1,4 @@
-var os = require('os')
+var Os = require('os')
 var menu = new nw.Menu({ type: 'menubar' });
 
 var menuNewQuiz = new nw.MenuItem({
@@ -8,7 +8,7 @@ var menuNewQuiz = new nw.MenuItem({
 	}
 });
 
-if(os.platform() == 'darwin') {
+if(Os.platform() == 'darwin') {
 	menu.createMacBuiltin('Coyote Quiz', {
 		hideEdit: true
 	});

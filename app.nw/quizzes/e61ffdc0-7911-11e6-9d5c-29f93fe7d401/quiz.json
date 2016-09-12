@@ -1,0 +1,1 @@
+{"name":"Találós kérdések","start":0,"questions":[{"question":"Mi a pálya?","image":"e62024d0-7911-11e6-9d5c-29f93fe7d401.jpg","answers":[{"text":"Vektor","goto":1},{"text":"Viktor","goto":0}]},{"question":"Igen?","image":"","answers":[{"text":"igen","goto":-1},{"text":"nem","goto":0}]}]}

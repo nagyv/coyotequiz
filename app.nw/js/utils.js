@@ -1,7 +1,7 @@
 'use strict';
-var fs = require('fs');
-var path = require('path');
-var uuid = require('uuid');
+const Fs = require('fs');
+const Path = require('path');
+const Uuid = require('uuid');
 const quiz_repo = 'quizzes';
 
 function ready(fn) {
@@ -25,10 +25,10 @@ function getQueryVariable(variable) {
 }
 
 function setup(callback) {
-    fs.exists(quiz_repo, function(exists) {
+    Fs.exists(quiz_repo, function(exists) {
         console.log(exists ? 'quizzes dir exists' : 'quizzes dir does not exist');
         if(!exists) {
-            fs.mkdir(quiz_repo, function(err) {
+            Fs.mkdir(quiz_repo, function(err) {
                 if(err) {
 					alert("Nem tudtam létrehozni a kvíz könyvtárat");
                 } else {
@@ -42,13 +42,13 @@ function setup(callback) {
 }
 
 function loadQuiz(id, cb) {
-    let quiz_json = path.join(quiz_repo, id, 'quiz.json');
-    fs.access(quiz_json, fs.R_OK, function(err) {
+    let quiz_json = Path.join(quiz_repo, id, 'quiz.json');
+    Fs.access(quiz_json, Fs.R_OK, function(err) {
         if(err) {
             console.log('No quiz.json exists', quiz_json);
             return;
         };
-        fs.readFile(quiz_json, 'utf8', function (err, data) {
+        Fs.readFile(quiz_json, 'utf8', function (err, data) {
           if (err) throw err;
           let quiz = _.extend({
             "id": id,
@@ -60,8 +60,8 @@ function loadQuiz(id, cb) {
 
 function writeQuiz(uid, data, cb) {
     if(!uid) {
-        uid = uuid.v1();
-        let err = fs.mkdirSync(path.join(quiz_repo, uid));
+        uid = Uuid.v1();
+        let err = Fs.mkdirSync(Path.join(quiz_repo, uid));
         if(err) {
             alert("Could not save quiz. Please report this!");
             cb(err);
@@ -69,26 +69,26 @@ function writeQuiz(uid, data, cb) {
         }
     }
 
-    let base_dir = path.join(quiz_repo, uid);
+    let base_dir = Path.join(quiz_repo, uid);
 
     // collect and move images
     // TODO: this should be done in sync
     data.questions = _.map(data.questions, function(question){
         if(question.image) {
-			let exists = fs.existsSync(path.join(base_dir, path.basename(question.image)))
+			let exists = Fs.existsSync(Path.join(base_dir, Path.basename(question.image)))
 			if(!exists) {
-				let filename = uuid.v1() + '.' + question.image.split('.')[1];
-				fs.createReadStream(question.image).pipe(fs.createWriteStream(path.join(base_dir, filename)));
+				let filename = Uuid.v1() + '.' + question.image.split('.')[1];
+				Fs.createReadStream(question.image).pipe(Fs.createWriteStream(Path.join(base_dir, filename)));
 				question.image = filename;
 			} else {
-				let filename = question.image.split(path.sep).splice(-1)[0];
+				let filename = question.image.split(Path.sep).splice(-1)[0];
 				question.image = filename;
 			}
         }
         return question;
     });
 
-    fs.writeFile(path.join(base_dir, 'quiz.json'), JSON.stringify(data), function(err) {
+    Fs.writeFile(Path.join(base_dir, 'quiz.json'), JSON.stringify(data), function(err) {
         if (err) throw err;
         cb(err);
     });
@@ -97,7 +97,7 @@ function writeQuiz(uid, data, cb) {
 var Quiz = Backbone.Model.extend({
     getImagePath: function(question) {
         if(!this.get('questions')[question].image) return false;
-        return fs.realpathSync(path.join(quiz_repo, this.id, this.get('questions')[question].image));
+        return Fs.realpathSync(Path.join(quiz_repo, this.id, this.get('questions')[question].image));
     }
 });
 var Quizzes = new (Backbone.Collection.extend({
