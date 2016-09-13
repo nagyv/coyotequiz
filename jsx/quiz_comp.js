@@ -53,17 +53,21 @@ var QuizComponent = React.createClass({
   },
   createQuestion: function() {
     let currentQuestion = this.getQuestion();
-    let image;
+    let asset;
     if(this.props.model.getImagePath(this.state.current)) {
         let imagePath = this.props.model.getImagePath(this.state.current);
-        image = <img className="img-responsive center-block" src={"file://" + imagePath} />;
+        asset = <img className="img-responsive center-block" src={"file://" + imagePath} />;
+    } 
+    else if(this.props.model.getVideoPath(this.state.current)) {
+        let assetPath = this.props.model.getVideoPath(this.state.current);
+        asset = <ReactPlayer width="" controls={true} playing url={"file://" + assetPath} />;
     } else {
-        image = '';
+        asset = '';
     }
 
     return <div><div id="question">
             <h2 className="qtext">{currentQuestion.question}</h2>
-            {image}
+            {asset}
         </div>
         <div className="row">
         {currentQuestion.answers.map(this.createAnswer)}

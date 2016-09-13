@@ -73,17 +73,24 @@ function writeQuiz(uid, data, cb) {
 
     // collect and move images
     // TODO: this should be done in sync
+    const writeAsset = function(base_dir, asset) {
+        let exists = Fs.existsSync(Path.join(base_dir, Path.basename(asset)))
+        if(asset.indexOf(base_dir) !== -1) {
+            return asset.split(Path.sep).splice(-1)[0];
+        } else {
+            let filename = Uuid.v1() + '.' + asset.split('.')[1];
+            Fs.createReadStream(asset).pipe(Fs.createWriteStream(Path.join(base_dir, filename)));
+            return filename;    
+        }
+    } 
+
     data.questions = _.map(data.questions, function(question){
+        console.log(base_dir, question.image);
         if(question.image) {
-			let exists = Fs.existsSync(Path.join(base_dir, Path.basename(question.image)))
-			if(!exists) {
-				let filename = Uuid.v1() + '.' + question.image.split('.')[1];
-				Fs.createReadStream(question.image).pipe(Fs.createWriteStream(Path.join(base_dir, filename)));
-				question.image = filename;
-			} else {
-				let filename = question.image.split(Path.sep).splice(-1)[0];
-				question.image = filename;
-			}
+			question.image = writeAsset(base_dir, question.image);
+        } 
+        else if (question.video) {
+            question.video = writeAsset(base_dir, question.video);
         }
         return question;
     });
@@ -95,9 +102,15 @@ function writeQuiz(uid, data, cb) {
 }
 
 var Quiz = Backbone.Model.extend({
+    getAssetPath: function(asset, question) {
+        if(!this.get('questions')[question][asset]) return false;
+        return Fs.realpathSync(Path.join(quiz_repo, this.id, this.get('questions')[question][asset]));
+    },
     getImagePath: function(question) {
-        if(!this.get('questions')[question].image) return false;
-        return Fs.realpathSync(Path.join(quiz_repo, this.id, this.get('questions')[question].image));
+        return this.getAssetPath('image', question);
+    },
+    getVideoPath: function(question) {
+        return this.getAssetPath('video', question);
     }
 });
 var Quizzes = new (Backbone.Collection.extend({

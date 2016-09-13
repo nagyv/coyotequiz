@@ -22,6 +22,7 @@ var Questions = Backbone.Collection.extend({
             return {
                 question: question.get('text'),
                 image: question.get('image'),
+                video: question.get('video'),
                 answers: answers
             };
         });
@@ -31,6 +32,7 @@ var Questions = Backbone.Collection.extend({
             return new Question({
                 'text': question.question,
                 'image': quiz.getImagePath(idx),
+                'video': quiz.getVideoPath(idx),
                 'answer1': question.answers[0] ? question.answers[0].text : '',
                 'goto1': question.answers[0] ? question.answers[0].goto : -1,
                 'answer2': question.answers[1] ? question.answers[1].text : '',
@@ -65,29 +67,41 @@ var QuestionComponent = React.createClass({
     getInitialState: function () {
         return {
             is_open: this.props.is_open,
-            imageData: "file://" + this.props.model.get('image')
+            imageData: "file://" + this.props.model.get('image'),
+            videoData: "file://" + this.props.model.get('video')
         };
     },
     //    remove: function() {
     //        questions.remove(this.props.model);
     //    },
     updateQuestion: function (event) {
-        this.props.model.set(event.target.dataset.field, event.target.value);
+        this.wrapper.model.set(event.target.dataset.field, event.target.value);
     },
     previewImage: function (event) {
-        if (event) this.updateQuestion(event);
-        var reader = new FileReader();
-
-        var comp = this;
-        reader.addEventListener("load", function () {
-            comp.setState({
-                imageData: reader.result
+        if (event) {
+            this.wrapper.model.set({
+                'image': event.target.value,
+                'video': ''
             });
-        }, false);
-
-        if (this.props.model.get('image')) {
-            reader.readAsDataURL(new File(this.props.model.get('image'), 'image'));
         }
+
+        //   let file = event.target.files[0];
+        this.setState({
+            imageData: "file://" + this.props.model.get('image'),
+            videoData: "file://" + this.props.model.get('video')
+        });
+    },
+    previewVideo: function (event) {
+        if (event) {
+            this.wrapper.model.set({
+                'video': event.target.value,
+                'image': ''
+            });
+        }
+        this.setState({
+            imageData: "file://" + this.props.model.get('image'),
+            videoData: "file://" + this.props.model.get('video')
+        });
     },
     toggle: function () {
         this.setState({ is_open: !this.state.is_open });
@@ -148,6 +162,15 @@ var QuestionComponent = React.createClass({
     },
     render: function () {
         let Collapse = ReactBootstrap.Collapse;
+        let videoPartial = '';
+        let imagePartial = '';
+        if (this.state.model.image) {
+            imagePartial = React.createElement('img', { className: 'col-xs-6 center-block', src: this.state.imageData });
+        }
+        if (this.state.model.video) {
+            videoPartial = React.createElement(ReactPlayer, { width: '', url: this.state.videoData, controls: true });
+        }
+
         return React.createElement(
             'div',
             null,
@@ -184,10 +207,22 @@ var QuestionComponent = React.createClass({
                                 null,
                                 'Kép'
                             ),
-                            React.createElement('input', { type: 'file', className: 'form-control', 'data-field': 'image', defaultValue: this.state.model.image,
-                                onChange: this.previewImage })
+                            React.createElement('input', { type: 'file', className: 'form-control', 'data-field': 'image', accept: 'image/*', value: '', defaultValue: this.state.model.image,
+                                onChange: this.previewImage }),
+                            React.createElement(
+                                'label',
+                                null,
+                                'Videó'
+                            ),
+                            React.createElement('input', { type: 'file', className: 'form-control', 'data-field': 'video', accept: 'video/*', value: '', defaultValue: this.state.model.video,
+                                onChange: this.previewVideo })
                         ),
-                        React.createElement('img', { className: 'col-xs-6 center-block', src: this.state.imageData })
+                        React.createElement(
+                            'div',
+                            { className: 'col-xs-6 center-block' },
+                            imagePartial,
+                            videoPartial
+                        )
                     ),
                     [1, 2, 3, 4].map(this.renderAnswerForm)
                 )
@@ -215,6 +250,7 @@ var NewQuizComponent = React.createClass({
         this.state.questions.add(new Question({
             text: '',
             image: '',
+            video: '',
             answer1: '',
             goto1: -1,
             answer2: '',
@@ -294,7 +330,8 @@ var NewQuizComponent = React.createClass({
                     React.createElement('span', { className: 'glyphicon glyphicon-home' }),
                     ' Kvízlista'
                 )
-            )
+            ),
+            React.createElement('video', { id: 'testVideoContainer' })
         );
     }
 });

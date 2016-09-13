@@ -97,12 +97,15 @@ var QuizComponent = React.createClass({
     },
     createQuestion: function () {
         let currentQuestion = this.getQuestion();
-        let image;
+        let asset;
         if (this.props.model.getImagePath(this.state.current)) {
             let imagePath = this.props.model.getImagePath(this.state.current);
-            image = React.createElement("img", { className: "img-responsive center-block", src: "file://" + imagePath });
+            asset = React.createElement("img", { className: "img-responsive center-block", src: "file://" + imagePath });
+        } else if (this.props.model.getVideoPath(this.state.current)) {
+            let assetPath = this.props.model.getVideoPath(this.state.current);
+            asset = React.createElement(ReactPlayer, { width: "", controls: true, playing: true, url: "file://" + assetPath });
         } else {
-            image = '';
+            asset = '';
         }
 
         return React.createElement(
@@ -116,7 +119,7 @@ var QuizComponent = React.createClass({
                     { className: "qtext" },
                     currentQuestion.question
                 ),
-                image
+                asset
             ),
             React.createElement(
                 "div",
