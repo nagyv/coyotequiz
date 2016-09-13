@@ -4,6 +4,8 @@
   "description": "A quiz app",
   "main": "index.js",
   "scripts": {
+    "start": "node_modules/.bin/nwbuild -r app.nw",
+    "build": "node_modules/.bin/nwbuild -p win64,linux64 app.nw",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
